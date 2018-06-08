@@ -26,6 +26,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot.'/local/drift/subscriptionform.php');
+require_once($CFG->dirroot.'/local/drift/lib.php');
 
 /**
  * Class local_drift_controller_subscription
@@ -75,19 +76,12 @@ class local_drift_controller_subscription extends mr_controller {
 
                 // Send user data to Drift.
                 if ($record->subscribed) {
-                    $roles = $cached->get('validuserroles');
-                    global $COURSE, $PAGE;
-                    $params['userid'] = $USER->id . '-' . $COURSE->fullname;
-                    $params['email'] = $USER->email;
-                    $params['name'] = format_string(fullname($USER));
-                    $params['issiteadmin'] = is_siteadmin();
-                    $params['country'] = $USER->country;
-                    $params['rolename'] = (is_siteadmin()) ? '' : reset($roles);
-                    $params['sitename'] = $COURSE->fullname;
-                    $params['language'] = $USER->lang;
+                    $params = local_drift_get_identification_data();
+                    global $PAGE;
 
                     $clientkey = get_config('local_drift', 'clientkey');
                     $PAGE->requires->js_call_amd('local_drift/drift', 'sendData', array($clientkey, $params));
+                    $cached->set('isidentified', 1);
                 }
 
             }

@@ -37,7 +37,15 @@ function local_drift_before_footer() {
         if (local_drift_is_user_subscribed()) {
             global $PAGE;
             $clientkey = get_config('local_drift', 'clientkey');
-            $PAGE->requires->js_call_amd('local_drift/drift', 'init', array($clientkey));
+            if (local_drift_is_user_identified()) {
+                $PAGE->requires->js_call_amd('local_drift/drift', 'init', array($clientkey));
+            } else {
+                // Identify the user in Drift for this particular session.
+                $PAGE->requires->js_call_amd('local_drift/drift', 'sendData', array($clientkey,
+                    local_drift_get_identification_data()));
+                $cached = cache::make('local_drift', 'driftallowed');
+                $cached->set('isidentified', 1);
+            }
         }
     }
 }
@@ -104,7 +112,6 @@ function local_drift_is_user_subscribed() {
  * @return bool
  */
 function local_drift_myprofile_navigation(core_user\output\myprofile\tree $tree, $user, $iscurrentuser, $course) {
-
     if (isguestuser()) {
         return false;
     }
@@ -119,4 +126,33 @@ function local_drift_myprofile_navigation(core_user\output\myprofile\tree $tree,
         $tree->add_node($node);
     }
     return $canseecontent === LOCAL_DRIFT_VALID_ACCESS;
+}
+
+/**
+ * Checks if the user is identified in Drift.
+ */
+function local_drift_is_user_identified() {
+    $cached = cache::make('local_drift', 'driftallowed');
+    $isidentified = $cached->get('isidentified');
+    return ($isidentified === 1) ? 1 : 0;
+}
+
+/**
+ * Retrieves the user information that Drift requires to identify the user.
+ * @return array
+ */
+function local_drift_get_identification_data() {
+    global $COURSE, $USER;
+    $params = array();
+    $cached = cache::make('local_drift', 'driftallowed');
+    $roles = $cached->get('validuserroles');
+    $params['userid'] = $USER->id . '-' . $COURSE->fullname;
+    $params['email'] = $USER->email;
+    $params['name'] = format_string(fullname($USER));
+    $params['issiteadmin'] = is_siteadmin();
+    $params['country'] = $USER->country;
+    $params['rolename'] = (is_siteadmin()) ? '' : reset($roles);
+    $params['sitename'] = $COURSE->fullname;
+    $params['language'] = $USER->lang;
+    return $params;
 }

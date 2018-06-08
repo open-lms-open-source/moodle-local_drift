@@ -33,8 +33,18 @@ define(['jquery', 'core/str', 'core/modal_factory', 'core/templates', 'local_dri
 
                 // Create button to test drift connection.
                 var div = $('#admin-clientkey');
+                var row = $('<div></div>');
+                var offset =  $('<div></div>');
                 var button = $('<button>Test Button</button>').attr('id', 'drift_test_connection');
+                // Some styles and classes for boost theme.
+                if (div.hasClass('row')) {
+                    row.attr('class', 'row');
+                    offset.attr('class', 'offset-sm-3 col-sm-3');
+                    button.css('margin-bottom', '1em');
+                }
                 button.attr('class', 'btn btn-primary').attr('type', 'submit');
+                offset.append(button);
+                row.append(offset);
 
                 // Disable the button.
                 var disableButton = function(text) {
@@ -85,7 +95,7 @@ define(['jquery', 'core/str', 'core/modal_factory', 'core/templates', 'local_dri
                         type: ModalFactory.types.DEFAULT
                     }, button).done(function(modal){
                         // Append button in the DOM.
-                        div.append(button);
+                        div.append(row);
                     });
                 });
 

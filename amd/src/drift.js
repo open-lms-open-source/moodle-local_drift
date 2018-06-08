@@ -23,7 +23,7 @@
 /**
  * JS code to load the javascript Drift client.
  */
-define([], function() {
+define(['core/str'], function(str) {
 
     /* eslint-disable */
     // Start of Async Drift Code.
@@ -83,9 +83,13 @@ define([], function() {
          */
         testConnection: function(clientKey) {
             load(clientKey);
-            drift.on('ready',function(api, payload) {
-                api.showWelcomeMessage({
-                    message: 'Drift connection is working'
+            var message = str.get_string('drift_welcome_message', 'local_drift');
+
+            $.when(message).done(function(localizedMessage) {
+                drift.on('ready',function(api, payload) {
+                    api.showWelcomeMessage({
+                        message: localizedMessage
+                    });
                 });
             });
         },

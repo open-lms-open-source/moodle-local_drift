@@ -37,7 +37,7 @@ if ($hassiteconfig) {
     $allroles = get_all_roles();
     $roles = [];
     foreach ($allroles as $key => $role) {
-        $roles[$role->shortname] = $role->name;
+        $roles[$role->shortname] = !empty($role->name) ? $role->name : $role->shortname;
     }
 
     $settings->add(new admin_setting_configmultiselect('local_drift/roles',
