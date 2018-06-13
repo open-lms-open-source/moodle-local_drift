@@ -20,8 +20,9 @@
 # @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
 
 @local @local_drift
-Feature: Test subscription and unsubscription for Drift plugin
+Feature: Test subscription in Drift plugin
   As a Teacher
+  I should be able to subscribe to Drift.
 
   Background:
     Given the following config values are set as admin:
@@ -38,11 +39,30 @@ Feature: Test subscription and unsubscription for Drift plugin
       | teacher1 | C1     | teacher |
       | student1 | C1     | student |
 
-  Scenario: Subscribe to Drift
-    Given I log in as "admin"
-    And I log out
+  Scenario: Link for Drift subscription should appear only to roles enable on Drift settings and site admins.
+    Given I log in as "student1"
+      And I go to my profile page
+      And I should not see "Drift subscription"
+      And I log out
+     Then I log in as "teacher1"
+      And I go to my profile page
+      And I should see "Drift subscription"
+      And I log out
+     Then I log in as "admin"
+      And I go to my profile page
+      And I should see "Drift subscription"
+      And I log out
 
-
-
-
-
+  Scenario: Subscription form should save state of user subscription.
+    Given I log in as "teacher1"
+      And I go to my profile page
+      And I follow "Drift subscription"
+     Then I wait until the page is ready
+      And the field "Drift subscription" matches value "0"
+      And I set the field "Drift subscription" to "1"
+      And I press "Save changes"
+     Then I log out
+      And I log in as "teacher1"
+      And I go to my profile page
+      And I follow "Drift subscription"
+      And the field "Drift subscription" matches value "1"

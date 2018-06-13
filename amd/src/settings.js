@@ -35,7 +35,7 @@ define(['jquery', 'core/str', 'core/modal_factory', 'core/templates', 'local_dri
                 var div = $('#admin-clientkey');
                 var row = $('<div></div>');
                 var offset =  $('<div></div>');
-                var button = $('<button>Test Button</button>').attr('id', 'drift_test_connection');
+                var button = $('<button>Test connection</button>').attr('id', 'drift_test_connection');
                 // Some styles and classes for boost theme.
                 if (div.hasClass('row')) {
                     row.attr('class', 'row');
