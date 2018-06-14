@@ -33,7 +33,7 @@ Feature: Test settings form in Drift plugin
       And I should see "Save form to test connection"
       And I should see "Client Secret Key"
       And I follow "Click to enter text"
-     Then I set the field with xpath "//input[@id='id_s_local_drift_clientkey']" to "right-password"
+     Then I set the field with xpath "//input[@id='id_s_local_drift_clientkey']" to "dummy"
       And I should see "Roles Enabled"
       And I set the field "Roles Enabled" to "teacher"
       And I press "Save changes"
@@ -46,3 +46,31 @@ Feature: Test settings form in Drift plugin
       And I press "Save changes"
       And I wait until the page is ready
       And I should see "Save form to test connection"
+
+  @javascript
+  Scenario: Test modal with an invalid client key.
+    Given I log in as "admin"
+      And I navigate to "Plugins" in site administration
+      And I follow "Drift Integration Plugin"
+      And I wait until the page is ready
+      And I follow "Click to enter text"
+     Then I set the field with xpath "//input[@id='id_s_local_drift_clientkey']" to "anything"
+      And I press "Save changes"
+      And I wait until the page is ready
+      And I press "Test connection"
+      And I wait "3" seconds
+     Then I should see "Connection not verified. Check client key."
+
+  @javascript
+  Scenario: Test modal with a valid client key.
+    Given I log in as "admin"
+    And I navigate to "Plugins" in site administration
+    And I follow "Drift Integration Plugin"
+    And I wait until the page is ready
+    And I follow "Click to enter text"
+    Then I set the field with xpath "//input[@id='id_s_local_drift_clientkey']" to "right-password"
+    And I press "Save changes"
+    And I wait until the page is ready
+    And I press "Test connection"
+    And I wait "3" seconds
+    Then I should see "Connection verified."

@@ -29,7 +29,7 @@ define(['jquery', 'core/str', 'core/modal_factory', 'core/templates', 'local_dri
         
         return {
             
-            init : function (clientKey) {
+            init : function(clientKey) {
 
                 // Create button to test drift connection.
                 var div = $('#admin-clientkey');
@@ -59,7 +59,7 @@ define(['jquery', 'core/str', 'core/modal_factory', 'core/templates', 'local_dri
                 ]);
 
                 // Load button with the right string.
-                $.when(strings).done(function (localizedStrings) {
+                $.when(strings).done(function(localizedStrings) {
                     // Selector of the client key input.
                     var input = $('#id_s_local_drift_clientkey');
 
@@ -71,7 +71,7 @@ define(['jquery', 'core/str', 'core/modal_factory', 'core/templates', 'local_dri
                     }
 
                     // Disabled button when a change occurs on the client key.
-                    $(input).on('input', function () {
+                    $(input).on('input', function() {
                         disableButton(localizedStrings[1]);
                     });
 
@@ -87,7 +87,7 @@ define(['jquery', 'core/str', 'core/modal_factory', 'core/templates', 'local_dri
                 var localizedModalStrings = [];
 
                 // Add the modal to DOM when the strings are ready.
-                $.when(modalStrings).done(function (localizedStrings) {
+                $.when(modalStrings).done(function(localizedStrings) {
                     localizedModalStrings = localizedStrings;
                     ModalFactory.create({
                         title: localizedStrings[0],
@@ -99,20 +99,71 @@ define(['jquery', 'core/str', 'core/modal_factory', 'core/templates', 'local_dri
                     });
                 });
 
-                button.click(function (e) {
+                button.click(function(e) {
                     e.preventDefault();
                     setDefault();
                     $('#drift_result').text('...');
                     var s = drift.getScript(clientKey);
+                    if (M.cfg.behatsiterunning) {
+                        var path = M.cfg.wwwroot + '/local/drift/tests/fixtures/';
+                        s.src = (clientKey.trim() == 'right-password'.trim()) ? path + 'dummy-drift.js' : path + 'empty.js';
+                    }
                     $.get(s.src).done(function() {
-                        swapClasses(true);
-                        $('#drift_result').text(localizedModalStrings[1]);
+                        whenTrue(modalExist, 20).then(function() {
+                            changeModal(true, localizedModalStrings[1]);
+                        });
                         drift.testConnection(clientKey);
                     }).fail(function () {
-                        swapClasses(false);
-                        $('#drift_result').text(localizedModalStrings[2]);
+                        whenTrue(modalExist, 20).then(function() {
+                            changeModal(false, localizedModalStrings[2])
+                        });
                     });
                 });
+
+                /**
+                 * Checks if the modal exists in the DOM
+                 * @returns {boolean}
+                 */
+                var modalExist = function() {
+                    return $('#drift_testing').length !== 0;
+                };
+
+                /**
+                 * Change modal class and texts.
+                 * @param {bool} status Response status
+                 * @param string
+                 */
+                var changeModal = function(status, string) {
+                    swapClasses(status);
+                    $('#drift_result').text(string);
+                };
+
+                /**
+                 * Makes a JQuery promise to see if some element exists.
+                 * @param {function} evaluateFunction
+                 * @param {int} maxIterations
+                 * @returns {promise} JQuery promise
+                 */
+                var whenTrue = function(evaluateFunction, maxIterations) {
+                    maxIterations = !maxIterations ? 10 : maxIterations;
+
+                    var prom = $.Deferred();
+                    var i = 0;
+                    var checker = setInterval(function() {
+                        i = i + 1;
+                        if (i > maxIterations) {
+                            prom.reject();
+                            clearInterval(checker);
+                        } else {
+                            if (evaluateFunction()) {
+                                prom.resolve();
+                                clearInterval(checker);
+                            }
+                        }
+                    }, 1000);
+
+                    return prom.promise();
+                };
 
                 /**
                  * Changes the class of the html element to match the response status.
