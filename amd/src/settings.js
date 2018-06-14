@@ -33,8 +33,8 @@ define(['jquery', 'core/str', 'core/modal_factory', 'core/templates', 'local_dri
 
                 // Create button to test drift connection.
                 var div = $('#admin-clientkey');
-                var row = $('<div></div>');
-                var offset =  $('<div></div>');
+                var row = $('<div></div>').attr('class', 'form-setting');
+                var offset =  $('<div></div>').attr('class', 'form-select');
                 var button = $('<button>Test connection</button>').attr('id', 'drift_test_connection');
                 // Some styles and classes for boost theme.
                 if (div.hasClass('row')) {
