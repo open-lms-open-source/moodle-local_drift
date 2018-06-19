@@ -41,3 +41,6 @@ $string['drift_usersubscription'] = 'Subscribe to Drift notifications.';
 $string['drift_usersubscription_help'] = 'Check this box, if you want to receive messages from Drift.';
 $string['drift_usersubscription_policy'] = 'In order to subscribe to Drift plugin, it is required to send your name, email, country, language and role to Drift Platform.';
 $string['drift_welcome_message'] = 'Drift connection is working.';
+$string['privacy:metadata:local_drift_subscription'] = 'Information about the subscription to Drift service.';
+$string['privacy:metadata:local_drift_subscription:userid'] = 'The ID of the current user.';
+$string['privacy:metadata:local_drift_subscription:subscribed'] = 'The status of Drift subscription for the current user.';
