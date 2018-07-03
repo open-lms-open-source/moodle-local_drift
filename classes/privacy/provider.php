@@ -87,7 +87,7 @@ class provider implements
         $record = $DB->get_record('local_drift_subscription', ['userid' => $userid]);
         if (!empty($record)) {
             $data = (object)[
-                'userid' => $record->userid,
+                'userid' => transform::user($record->userid),
                 'subscribed' => transform::yesno($record->subscribed)
             ];
             writer::with_context($context)->export_data(['local_drift_subscription'], $data);
