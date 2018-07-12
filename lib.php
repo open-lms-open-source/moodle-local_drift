@@ -51,13 +51,35 @@ function local_drift_before_footer() {
 }
 
 /**
+ * Checks if the roles that can subscribe to Drift are the same or have changed
+ * @return bool True if drift valid roles have changed, false otherwise.
+ */
+function local_drift_change_valid_roles() {
+    $cached = cache::make('local_drift', 'driftallowed');
+    $validroles = $cached->get('validroles');
+    $change = false;
+    if (!empty($validroles)) {
+        $driftroles = explode(',', get_config('local_drift', 'roles'));
+
+        if (count($driftroles) === count($validroles)) {
+            foreach ($driftroles as $key => $role) {
+                $change = $change || !in_array($role, $validroles);
+            }
+        } else {
+            $change = true;
+        }
+    }
+    return $change;
+}
+
+/**
  * Validates if the user has a role in any context that allows to receive messages form drift.
- * @return int 1 if the user has a vlaid role, 2 otherwise.
+ * @return int 1 if the user has a valid role, 2 otherwise.
  */
 function local_drift_validate_user_roles() {
     $cached = cache::make('local_drift', 'driftallowed');
     $canseecontent = $cached->get('hasvalidroles');
-    if (!$canseecontent) {
+    if (!$canseecontent || local_drift_change_valid_roles()) {
         global $DB, $USER;
         $validroles = explode(',', get_config('local_drift', 'roles'));
         // We need to store in cache if the user actually could use this plugin.
@@ -78,6 +100,7 @@ function local_drift_validate_user_roles() {
         $canseecontent = ($hasavalidrole || is_siteadmin()) ? LOCAL_DRIFT_VALID_ACCESS : LOCAL_DRIFT_INVALID_ACCESS;
         $cached->set('hasvalidroles', $canseecontent);
         $cached->set('validuserroles', $roles);
+        $cached->set('validroles', $validroles);
     }
     return $canseecontent;
 }
