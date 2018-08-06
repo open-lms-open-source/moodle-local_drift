@@ -101,15 +101,7 @@ define(['core/str'], function(str) {
          */
         sendData: function (clientKey, params) {
             load(clientKey);
-            drift.identify(params.userid, {
-                email: params.email,
-                name: params.name,
-                isSiteAdmin: params.issiteadmin,
-                country: params.country,
-                rolename: params.rolename,
-                sitename: params.sitename,
-                language: params.language
-            });
+            drift.identify(params.userid, params.data);
         }
     };
 });

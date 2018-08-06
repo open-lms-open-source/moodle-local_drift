@@ -110,4 +110,62 @@ class local_drift_testcase extends advanced_testcase {
         $this->assertEquals(0, local_drift_is_user_subscribed());
     }
 
+    public function test_drift_user_identification_data() {
+        global $USER;
+
+        // Creates teacher.
+        $teacher = $this->getDataGenerator()->create_user();
+        $course = $this->getDataGenerator()->create_course();
+        $this->getDataGenerator()->enrol_user($teacher->id, $course->id, 'teacher');
+        $this->setUser($teacher);
+
+        set_config('roles', 'teacher', 'local_drift');
+        $this->assertEquals(LOCAL_DRIFT_VALID_ACCESS, local_drift_validate_user_roles());
+
+        // Check data generated for a non site admin user.
+        $params = local_drift_get_identification_data();
+        $this->check_identification_data($params, $teacher, 'teacher');
+        $this->setUser(null);
+
+        // Check data generated for a site admin user.
+        $this->setAdminUser();
+
+        $params = local_drift_get_identification_data();
+        $this->check_identification_data($params, $USER, null, true);
+        $this->setUser(null);
+    }
+
+    public function test_drift_user_identification_data_with_several_valid_roles_() {
+        // Creates a teacher.
+        $user = $this->getDataGenerator()->create_user();
+        $course1 = $this->getDataGenerator()->create_course();
+        $course2 = $this->getDataGenerator()->create_course();
+        $this->getDataGenerator()->enrol_user($user->id, $course1->id, 'teacher');
+        $this->getDataGenerator()->enrol_user($user->id, $course2->id, 'student');
+        $this->setUser($user);
+
+        set_config('roles', 'teacher,student', 'local_drift');
+        $this->assertEquals(LOCAL_DRIFT_VALID_ACCESS, local_drift_validate_user_roles());
+
+        // Check data generated for a non site admin user.
+        $params = local_drift_get_identification_data();
+        $this->check_identification_data($params, $user, 'teacher');
+
+        $this->setUser(null);
+    }
+
+    private function check_identification_data($params, $user, $rolename = null, $issiteadmin = false) {
+        global $CFG, $DB;
+
+        $role = $DB->get_record('role', ['shortname' => $rolename]);
+        $this->assertEquals($params['userid'], $user->id . '-' . $CFG->wwwroot);
+        $this->assertEquals($params['data']['email'], $user->email);
+        $this->assertEquals($params['data']['name'], format_string(fullname($user)));
+        $this->assertEquals($params['data']['issiteadmin'], $issiteadmin ? 'true' : 'false');
+        $this->assertEquals($params['data']['roleid'], is_null($rolename) ? 'site admin' : $role->id);
+        $this->assertEquals($params['data']['rolename'], is_null($rolename) ? 'site admin' : $role->shortname);
+        $this->assertEquals($params['data']['sitename'], $CFG->wwwroot);
+        $this->assertEquals($params['data']['language'], $user->lang);
+    }
+
 }

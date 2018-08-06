@@ -37,15 +37,9 @@ function local_drift_before_footer() {
         if (local_drift_is_user_subscribed()) {
             global $PAGE;
             $clientkey = get_config('local_drift', 'clientkey');
-            if (local_drift_is_user_identified()) {
-                $PAGE->requires->js_call_amd('local_drift/drift', 'init', array($clientkey));
-            } else {
-                // Identify the user in Drift for this particular session.
-                $PAGE->requires->js_call_amd('local_drift/drift', 'sendData', array($clientkey,
-                    local_drift_get_identification_data()));
-                $cached = cache::make('local_drift', 'driftallowed');
-                $cached->set('isidentified', 1);
-            }
+            // Identify the user in Drift for this particular session.
+            $PAGE->requires->js_call_amd('local_drift/drift', 'sendData', array($clientkey,
+                local_drift_get_identification_data()));
         }
     }
 }
@@ -86,7 +80,8 @@ function local_drift_validate_user_roles() {
         $sql = "SELECT DISTINCT(r.shortname), r.id
                   FROM {role} r
                   JOIN {role_assignments} ra ON r.id = ra.roleid
-                 WHERE ra.userid = :userid";
+                 WHERE ra.userid = :userid
+              ORDER BY r.id";
         $records = $DB->get_records_sql($sql, array('userid' => $USER->id));
         $userroles = array_keys($records);
         $hasavalidrole = false;
@@ -94,7 +89,7 @@ function local_drift_validate_user_roles() {
         foreach ($validroles as $role) {
             $hasavalidrole = $hasavalidrole || in_array($role, $userroles);
             if (in_array($role, $userroles)) {
-                array_push($roles, $records[$role]->id);
+                $roles[$records[$role]->id] = $role;
             }
         }
         $canseecontent = ($hasavalidrole || is_siteadmin()) ? LOCAL_DRIFT_VALID_ACCESS : LOCAL_DRIFT_INVALID_ACCESS;
@@ -152,30 +147,25 @@ function local_drift_myprofile_navigation(core_user\output\myprofile\tree $tree,
 }
 
 /**
- * Checks if the user is identified in Drift.
- */
-function local_drift_is_user_identified() {
-    $cached = cache::make('local_drift', 'driftallowed');
-    $isidentified = $cached->get('isidentified');
-    return ($isidentified === 1) ? 1 : 0;
-}
-
-/**
  * Retrieves the user information that Drift requires to identify the user.
  * @return array
  */
 function local_drift_get_identification_data() {
-    global $COURSE, $USER;
+    global $USER, $CFG;
+
     $params = array();
     $cached = cache::make('local_drift', 'driftallowed');
     $roles = $cached->get('validuserroles');
-    $params['userid'] = $USER->id . '-' . $COURSE->fullname;
-    $params['email'] = $USER->email;
-    $params['name'] = format_string(fullname($USER));
-    $params['issiteadmin'] = is_siteadmin();
-    $params['country'] = $USER->country;
-    $params['rolename'] = (is_siteadmin()) ? '' : reset($roles);
-    $params['sitename'] = $COURSE->fullname;
-    $params['language'] = $USER->lang;
+    $roleid = !empty($roles) ? min(array_keys($roles)) : null;
+    $params['userid'] = $USER->id . '-' . $CFG->wwwroot;
+    $params['data'] = [];
+    $params['data']['email'] = $USER->email;
+    $params['data']['name'] = format_string(fullname($USER));
+    $params['data']['issiteadmin'] = (is_siteadmin()) ? 'true' : 'false';
+    $params['data']['country'] = $USER->country;
+    $params['data']['roleid'] = (is_siteadmin()) ? 'site admin' : $roleid;
+    $params['data']['rolename'] = (is_siteadmin()) ? 'site admin' : $roles[$roleid];
+    $params['data']['sitename'] = $CFG->wwwroot;
+    $params['data']['language'] = current_language();
     return $params;
 }

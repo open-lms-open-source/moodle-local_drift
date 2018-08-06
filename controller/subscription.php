@@ -81,7 +81,6 @@ class local_drift_controller_subscription extends mr_controller {
 
                     $clientkey = get_config('local_drift', 'clientkey');
                     $PAGE->requires->js_call_amd('local_drift/drift', 'sendData', array($clientkey, $params));
-                    $cached->set('isidentified', 1);
                 }
 
             }
