@@ -149,6 +149,18 @@ class provider implements
             ],
             'privacy:metadata:local_drift_subscription');
 
+        $collection->add_external_location_link('drift', [
+            'userid' => 'privacy:metadata:drift:userid',
+            'name' => 'privacy:metadata:drift:name',
+            'email' => 'privacy:metadata:drift:email',
+            'country' => 'privacy:metadata:drift:country',
+            'roleid' => 'privacy:metadata:drift:roleid',
+            'rolename' => 'privacy:metadata:drift:rolename',
+            'language' => 'privacy:metadata:drift:language',
+            'issiteadmin' => 'privacy:metadata:drift:isisteadmin',
+            'sitename' => 'privacy:metadata:drift:sitename',
+        ], 'privacy:metadata:drift');
+
         return $collection;
 
     }
