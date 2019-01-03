@@ -34,6 +34,7 @@ Feature: Test subscription in Drift plugin
       | username | firstname | lastname | email                |
       | student1 | Student   | 1        | student1@example.com |
       | teacher1 | Teacher   | 1        | teacher1@example.com |
+      | admin2   | Admin     | 1        | admin2@example.com   |
     And the following "course enrolments" exist:
       | user     | course | role    |
       | teacher1 | C1     | teacher |
@@ -66,3 +67,38 @@ Feature: Test subscription in Drift plugin
       And I go to my profile page
       And I follow "Drift subscription"
       And the field "Drift subscription" matches value "1"
+
+  @javascript
+  Scenario: Site admin should be enrolled by default to Drift and he could change the state of his subscription.
+    Given I log in as "admin"
+      And I go to my profile page
+      And I should see "Drift subscription"
+      And I follow "Drift subscription"
+      And the field "Drift subscription" matches value "1"
+      And I set the field "Drift subscription" to "0"
+      And I press "Save changes"
+      And the field "Drift subscription" matches value "0"
+     Then I log out
+      And I log in as "admin"
+      And I go to my profile page
+      And I follow "Drift subscription"
+     Then the field "Drift subscription" matches value "0"
+
+  @javascript
+  Scenario: New site admin should be enrolled by default to Drift.
+    Given I log in as "admin2"
+    And I go to my profile page
+    And I should not see "Drift subscription"
+    And I log out
+   Then I log in as "admin"
+    And I navigate to "Users" in site administration
+    And I follow "Site administrators"
+    And I click on "//*[@id='addselect']/optgroup/option[1]" "xpath_element"
+    And I click on "Add" "button"
+    And I wait until the page is ready
+    And I click on "Continue" "button"
+    And I log out
+   Then I log in as "admin2"
+    And I go to my profile page
+    And I follow "Drift subscription"
+    And the field "Drift subscription" matches value "1"

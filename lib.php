@@ -110,6 +110,8 @@ function local_drift_is_user_subscribed() {
     if ($issubscribed === false) {
         // Add to cache the information about subscription.
         global $DB, $USER;
+
+        local_drift_subscribe_new_site_admin();
         $record = $DB->get_record('local_drift_subscription', array('userid' => $USER->id));
         if (empty($record)) {
             $issubscribed = 0;
@@ -168,4 +170,20 @@ function local_drift_get_identification_data() {
     $params['data']['sitename'] = $CFG->wwwroot;
     $params['data']['language'] = current_language();
     return $params;
+}
+
+/**
+ * Subscribes by default a site admin to Drift.
+ */
+function local_drift_subscribe_new_site_admin() {
+    global $USER, $DB;
+
+    // Checks if user is an admin and he has a subscription to Drift.
+    if (is_siteadmin() && !$DB->record_exists('local_drift_subscription', array('userid' => $USER->id))) {
+        // Creates a subscription to Drift for a new site admin.
+        $record = new stdClass();
+        $record->userid = $USER->id;
+        $record->subscribed = 1;
+        $DB->insert_record('local_drift_subscription', $record);
+    }
 }
