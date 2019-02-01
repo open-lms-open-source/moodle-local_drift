@@ -34,12 +34,14 @@ Feature: Test settings form in Drift plugin
       And I should see "Client Secret Key"
       And I follow "Click to enter text"
      Then I set the field with xpath "//input[@id='id_s_local_drift_clientkey']" to "dummy"
-      And I should see "Roles Enabled"
-      And I set the field "Roles Enabled" to "teacher"
+      # Please uncomment when INT-14017 is reverted.
+      # And I should see "Roles Enabled"
+      # And I set the field "Roles Enabled" to "teacher"
       And I press "Save changes"
       And I wait until the page is ready
      Then I should see "Test connection"
-      And the field "Roles Enabled" matches value "teacher"
+      # Please uncomment when INT-14017 is reverted.
+      # And the field "Roles Enabled" matches value "teacher"
       And I should see "Client Secret Key"
       And I follow "Edit password"
      Then I set the field with xpath "//input[@id='id_s_local_drift_clientkey']" to ""

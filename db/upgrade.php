@@ -58,6 +58,14 @@ function xmldb_local_drift_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 2018052904, 'local', 'drift');
     }
 
+    if ($oldversion < 2019020500) {
+
+        set_config('roles', '', 'local_drift'); // We need to empty this config value.
+
+        // Drift savepoint reached.
+        upgrade_plugin_savepoint(true, 2019020500, 'local', 'drift');
+    }
+
     return true;
 
 }

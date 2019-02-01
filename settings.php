@@ -34,6 +34,8 @@ if ($hassiteconfig) {
     $settings->add(new admin_setting_configpasswordunmask('local_drift/clientkey',
         get_string('drift_clientkey', 'local_drift'), get_string('drift_clientkey_desc', 'local_drift'), ''));
 
+    // @codingStandardsIgnoreStart
+    /* INT-14017: Request to hide this code.
     $allroles = get_all_roles();
     $roles = [];
     foreach ($allroles as $key => $role) {
@@ -41,7 +43,8 @@ if ($hassiteconfig) {
     }
 
     $settings->add(new admin_setting_configmultiselect('local_drift/roles',
-        get_string('drift_roles', 'local_drift'), get_string('drift_roles_desc', 'local_drift'), [], $roles));
+        get_string('drift_roles', 'local_drift'), get_string('drift_roles_desc', 'local_drift'), [], $roles));*/
+    // @codingStandardsIgnoreEnd
 
     $clientkey = get_config('local_drift', 'clientkey');
     $PAGE->requires->js_call_amd('local_drift/settings', 'init', array($clientkey));

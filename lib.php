@@ -37,6 +37,9 @@ function local_drift_before_footer() {
         if (local_drift_is_user_subscribed()) {
             global $PAGE;
             $clientkey = get_config('local_drift', 'clientkey');
+            if (empty($clientkey)) {
+                return;
+            }
             // Identify the user in Drift for this particular session.
             $PAGE->requires->js_call_amd('local_drift/drift', 'sendData', array($clientkey,
                 local_drift_get_identification_data()));
