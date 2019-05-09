@@ -46,7 +46,8 @@ if ($hassiteconfig) {
         get_string('drift_roles', 'local_drift'), get_string('drift_roles_desc', 'local_drift'), [], $roles));*/
     // @codingStandardsIgnoreEnd
 
-    $clientkey = get_config('local_drift', 'clientkey');
-    $PAGE->requires->js_call_amd('local_drift/settings', 'init', array($clientkey));
-
+    if ($ADMIN->fulltree) {
+        $clientkey = get_config('local_drift', 'clientkey');
+        $PAGE->requires->js_call_amd('local_drift/settings', 'init', array($clientkey));
+    }
 }

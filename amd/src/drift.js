@@ -67,7 +67,7 @@ define(['core/str'], function(str) {
          */
         getScript: function(t) {
             var e = 3e5, n = Math.ceil(new Date() / e) * e, o = document.createElement("script");
-            o.type = "text/javascript", o.async = !0, o.crossorigin = "anonymous", o.src = "https://js.driftt.com/include/" + n + "/" + t + ".js";
+            o.type = "text/javascript", o.async = !0, o.crossorigin = "anonymous", o.src = "https://js.driftt.com/embeds/" + n + "/" + t + ".json";
             return o;
         },
 
