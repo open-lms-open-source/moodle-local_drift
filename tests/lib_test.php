@@ -27,6 +27,7 @@ defined('MOODLE_INTERNAL') || die();
 global $CFG;
 
 require_once($CFG->dirroot . '/local/drift/lib.php');
+require_once($CFG->dirroot . '/admin/tool/mrooms/tests/generator.php');
 
 /**
  * Class local_drift_testcase
@@ -125,6 +126,12 @@ class local_drift_testcase extends advanced_testcase {
         // Check data generated for a non site admin user.
         $params = local_drift_get_identification_data();
         $this->check_identification_data($params, $teacher, 'teacher');
+        $this->assertNull($params['data']['avgactiveusers']);
+        $this->assertNull($params['data']['avgregisteredusers']);
+        $this->assertFalse($params['data']['purchasedusers']);
+        $this->assertFalse($params['data']['purchasedstorage']);
+        $this->assertFalse($params['data']['useroverage']);
+        $this->assertFalse($params['data']['storageoverage']);
         $this->setUser(null);
 
         // Check data generated for a site admin user.
@@ -136,6 +143,7 @@ class local_drift_testcase extends advanced_testcase {
     }
 
     public function test_drift_user_identification_data_with_several_valid_roles_() {
+        global $CFG;
         // Creates a teacher.
         $user = $this->getDataGenerator()->create_user();
         $course1 = $this->getDataGenerator()->create_course();
@@ -147,8 +155,21 @@ class local_drift_testcase extends advanced_testcase {
         set_config('roles', 'teacher,student', 'local_drift');
         $this->assertEquals(LOCAL_DRIFT_VALID_ACCESS, local_drift_validate_user_roles());
 
+        $generator = new data_generator();
+        $CFG->tool_mrooms_licensed_users = 1000;
+        $CFG->tool_mrooms_licensed_storage = 1048576;
+        set_config('mdata_filedir_storage', 2603968, 'tool_mrooms');
+        set_config('s3_filedir_storage', 2603968, 'tool_mrooms');
+        list($expectedactive, $expectedregistered) = $generator->user_usage();
         // Check data generated for a non site admin user.
         $params = local_drift_get_identification_data();
+        $this->assertEquals($params['data']['avgactiveusers'], $expectedactive);
+        $this->assertEquals($params['data']['avgregisteredusers'], $expectedregistered);
+        $this->assertEquals($params['data']['purchasedusers'], $CFG->tool_mrooms_licensed_users);
+        $this->assertEquals($params['data']['purchasedstorage'],
+            format_float(($CFG->tool_mrooms_licensed_storage / 1024) / 1024, 2) . ' GB');
+        $this->assertTrue($params['data']['useroverage']);
+        $this->assertTrue($params['data']['storageoverage']);
         $this->check_identification_data($params, $user, 'teacher');
 
         $this->setUser(null);
