@@ -23,7 +23,7 @@
 /**
  * JS code to load the javascript Drift client.
  */
-define(['core/str'], function(str) {
+define(['jquery','core/str'], function($, str) {
 
     /* eslint-disable */
     // Start of Async Drift Code.
@@ -50,7 +50,6 @@ define(['core/str'], function(str) {
     }();
     drift.SNIPPET_VERSION = '0.3.1';
     // End of Async Drift Code.
-    /* eslint-enable */
 
     /**
      * Load drift client.
@@ -60,11 +59,23 @@ define(['core/str'], function(str) {
         drift.load(clientKey);
     };
 
+    var DRIFT_WIDGET_SELECTOR = '.drift-open-widget'
+
+    $(function() {
+        drift.on('ready', (api) => {
+            $(DRIFT_WIDGET_SELECTOR).click((e) => {
+                e.preventDefault();
+                api.sidebar.open();
+            });
+        });
+    });
+    /* eslint-enable */
     return {
 
         /**
          * Get the url of the script.
          */
+        /* eslint-disable */
         getScript: function(t) {
             var e = 3e5, n = Math.ceil(new Date() / e) * e, o = document.createElement("script");
             o.type = "text/javascript", o.async = !0, o.crossorigin = "anonymous", o.src = "https://js.driftt.com/embeds/" + n + "/" + t + ".json";
@@ -86,7 +97,7 @@ define(['core/str'], function(str) {
             var message = str.get_string('drift_welcome_message', 'local_drift');
 
             $.when(message).done(function(localizedMessage) {
-                drift.on('ready',function(api, payload) {
+                drift.on('ready',function(api) {
                     api.showWelcomeMessage({
                         message: localizedMessage
                     });
@@ -103,5 +114,6 @@ define(['core/str'], function(str) {
             load(clientKey);
             drift.identify(params.userid, params.data);
         }
+        /* eslint-enable */
     };
 });

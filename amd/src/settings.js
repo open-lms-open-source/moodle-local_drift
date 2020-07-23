@@ -26,9 +26,7 @@
 
 define(['jquery', 'core/str', 'core/modal_factory', 'core/templates', 'local_drift/drift'],
     function($, str, ModalFactory, Templates, drift) {
-        
         return {
-            
             init : function(clientKey) {
 
                 // Create button to test drift connection.
@@ -49,7 +47,7 @@ define(['jquery', 'core/str', 'core/modal_factory', 'core/templates', 'local_dri
                 // Disable the button.
                 var disableButton = function(text) {
                     $(button).attr('disabled', 'disabled');
-                    $(button).text(text)
+                    $(button).text(text);
                 };
 
                 // First bring the required stings for the button.
@@ -93,7 +91,7 @@ define(['jquery', 'core/str', 'core/modal_factory', 'core/templates', 'local_dri
                         title: localizedStrings[0],
                         body: Templates.render('local_drift/settings', {}),
                         type: ModalFactory.types.DEFAULT
-                    }, button).done(function(modal){
+                    }, button).done(function(){
                         // Append button in the DOM.
                         div.append(row);
                     });
@@ -115,7 +113,7 @@ define(['jquery', 'core/str', 'core/modal_factory', 'core/templates', 'local_dri
                         drift.testConnection(clientKey);
                     }).fail(function () {
                         whenTrue(modalExist, 20).then(function() {
-                            changeModal(false, localizedModalStrings[2])
+                            changeModal(false, localizedModalStrings[2]);
                         });
                     });
                 });
@@ -199,5 +197,5 @@ define(['jquery', 'core/str', 'core/modal_factory', 'core/templates', 'local_dri
                 };
             }
 
-        }
+        };
 });
