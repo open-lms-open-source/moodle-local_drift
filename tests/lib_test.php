@@ -36,7 +36,7 @@ require_once($CFG->dirroot . '/admin/tool/mrooms/tests/generator.php');
  */
 class local_drift_testcase extends advanced_testcase {
 
-    public function setUp() {
+    public function setUp(): void {
         $this->resetAfterTest(true);
     }
 

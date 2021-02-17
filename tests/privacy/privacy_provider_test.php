@@ -41,7 +41,7 @@ use local_drift\privacy\provider;
  */
 class local_drift_privacy_provider_testcase extends provider_testcase {
 
-    public function setUp() {
+    public function setUp(): void {
         $this->resetAfterTest();
     }
 
