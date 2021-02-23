@@ -19,7 +19,7 @@
  *
  * @package    local_drift
  * @author     Guillermo Alvarez
- * @copyright  Copyright (c) 2018 Blackboard Inc. (http://www.blackboard.com)
+ * @copyright  Copyright (c) 2018 Open LMS (https://www.openlms.net)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -36,7 +36,7 @@ use local_drift\privacy\provider;
  * Testcase for local Drift privacy implementation.
  *
  * @package    local_drift
- * @copyright  Copyright (c) 2018 Blackboard Inc. (http://www.blackboard.com)
+ * @copyright  Copyright (c) 2018 Open LMS (https://www.openlms.net)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class local_drift_privacy_provider_testcase extends provider_testcase {
