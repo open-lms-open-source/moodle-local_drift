@@ -18,8 +18,8 @@
  * Drift integration version file
  *
  * @package    local_drift
- * @author     Guillermo Alvarez <guillermo.alvarez@blackboard.com>
- * @copyright  Copyright (c) 2018 Blackboard Inc. (http://www.blackboard.com)
+ * @author     Guillermo Alvarez
+ * @copyright  Copyright (c) 2018 Open LMS (https://www.openlms.net)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -31,7 +31,7 @@ require_once($CFG->dirroot.'/local/drift/lib.php');
 /**
  * Class local_drift_controller_subscription
  * @package   local_drift
- * @copyright Copyright (c) 2018 Blackboard Inc. (http://www.blackboard.com)
+ * @copyright Copyright (c) 2018 Open LMS (https://www.openlms.net)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class local_drift_controller_subscription extends mr_controller {
