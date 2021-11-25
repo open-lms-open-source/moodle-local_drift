@@ -34,6 +34,13 @@ require_once($CFG->dirroot . '/admin/tool/mrooms/classes/local/filestorage_table
  * Hook to load drift in every view.
  */
 function local_drift_before_footer() {
+
+    // Detect if we are being rendered inside an H5P activity iframe (no need for a duplicate messenger).
+    global $component;
+    if ($component === "mod_h5pactivity") {
+        return;
+    }
+
     $canseecontent = local_drift_validate_user_roles();
     if ($canseecontent === LOCAL_DRIFT_VALID_ACCESS) {
         if (local_drift_is_user_subscribed()) {
