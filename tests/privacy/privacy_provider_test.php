@@ -22,9 +22,7 @@
  * @copyright  Copyright (c) 2018 Open LMS (https://www.openlms.net)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-defined('MOODLE_INTERNAL') || die();
-
+namespace local_drift;
 use core_privacy\local\request\approved_contextlist;
 use core_privacy\local\request\writer;
 use core_privacy\tests\provider_testcase;
@@ -39,7 +37,7 @@ use local_drift\privacy\provider;
  * @copyright  Copyright (c) 2018 Open LMS (https://www.openlms.net)
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class local_drift_privacy_provider_testcase extends provider_testcase {
+class privacy_provider_test extends provider_testcase {
 
     public function setUp(): void {
         $this->resetAfterTest();
@@ -54,7 +52,7 @@ class local_drift_privacy_provider_testcase extends provider_testcase {
 
     private function mock_drift_user_subscription(int $userid) {
         global $DB;
-        $data = new stdClass();
+        $data = new \stdClass();
         $data->userid = $userid;
         $data->subscribed = 1;
         $DB->insert_record('local_drift_subscription', $data);
