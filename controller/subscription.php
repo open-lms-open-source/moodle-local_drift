@@ -47,7 +47,8 @@ class local_drift_controller_subscription extends mr_controller {
     public function view_action() {
 
         if (isguestuser()) {
-            print_error('invaliduser');
+            throw new moodle_exception('invaliduser', 'error');
+
         }
 
         if (isloggedin()) {

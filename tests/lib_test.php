@@ -21,7 +21,7 @@
  * @copyright Copyright (c) 2018 Open LMS (https://www.openlms.net)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
+namespace local_drift;
 defined('MOODLE_INTERNAL') || die();
 
 global $CFG;
@@ -34,7 +34,7 @@ require_once($CFG->dirroot . '/admin/tool/mrooms/tests/generator.php');
  * @copyright Copyright (c) 2018 Open LMS (https://www.openlms.net)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class local_drift_testcase extends advanced_testcase {
+class lib_test extends \advanced_testcase {
 
     public function setUp(): void {
         $this->resetAfterTest(true);
@@ -95,18 +95,18 @@ class local_drift_testcase extends advanced_testcase {
         $this->assertEquals(0, local_drift_is_user_subscribed());
 
         // Simulate a subscription to Drift from this user.
-        $record = new stdClass();
+        $record = new \stdClass();
         $record->userid = $user->id;
         $record->subscribed = 1;
         $DB->insert_record('local_drift_subscription', $record);
-        $cached = cache::make('local_drift', 'driftallowed');
+        $cached = \cache::make('local_drift', 'driftallowed');
         $cached->set('issubscribed', 1);
         $this->assertEquals(1, local_drift_is_user_subscribed());
 
         // Simulate an unsubscrition to Drift.
         $record->subscribed = 0;
         $DB->insert_record('local_drift_subscription', $record);
-        $cached = cache::make('local_drift', 'driftallowed');
+        $cached = \cache::make('local_drift', 'driftallowed');
         $cached->set('issubscribed', 0);
         $this->assertEquals(0, local_drift_is_user_subscribed());
     }
@@ -155,7 +155,7 @@ class local_drift_testcase extends advanced_testcase {
         set_config('roles', 'teacher,student', 'local_drift');
         $this->assertEquals(LOCAL_DRIFT_VALID_ACCESS, local_drift_validate_user_roles());
 
-        $generator = new data_generator();
+        $generator = new \data_generator();
         $CFG->tool_mrooms_licensed_users = 1000;
         $CFG->tool_mrooms_licensed_storage = 1048576;
         set_config('mdata_filedir_storage', 2603968, 'tool_mrooms');

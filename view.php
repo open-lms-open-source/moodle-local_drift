@@ -33,5 +33,3 @@ global $CFG;
 require($CFG->dirroot . '/local/mr/bootstrap.php');
 
 mr_controller::render('local/drift', 'pluginname', 'local_drift');
-
-// @codingStandardsIgnoreEnd
