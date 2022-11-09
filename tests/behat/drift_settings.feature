@@ -27,8 +27,7 @@ Feature: Test settings form in Drift plugin
   @javascript
   Scenario: Test connection button behaviour in drift plugin with and without client key.
     Given I log in as "admin"
-      And I navigate to "Plugins" in site administration
-      And I follow "Drift Integration Plugin"
+      And I navigate to "Plugins > Drift Integration Plugin" in site administration
       And I wait until the page is ready
       And I should see "Save form to test connection"
       And I should see "Client Secret Key"
@@ -52,8 +51,7 @@ Feature: Test settings form in Drift plugin
   @javascript
   Scenario: Test modal with an invalid client key.
     Given I log in as "admin"
-      And I navigate to "Plugins" in site administration
-      And I follow "Drift Integration Plugin"
+      And I navigate to "Plugins > Drift Integration Plugin" in site administration
       And I wait until the page is ready
       And I follow "Click to enter text"
      Then I set the field with xpath "//input[@id='id_s_local_drift_clientkey']" to "anything"
@@ -66,8 +64,7 @@ Feature: Test settings form in Drift plugin
   @javascript
   Scenario: Test modal with a valid client key.
     Given I log in as "admin"
-    And I navigate to "Plugins" in site administration
-    And I follow "Drift Integration Plugin"
+    And I navigate to "Plugins > Drift Integration Plugin" in site administration
     And I wait until the page is ready
     And I follow "Click to enter text"
     Then I set the field with xpath "//input[@id='id_s_local_drift_clientkey']" to "right-password"

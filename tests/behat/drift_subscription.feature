@@ -91,8 +91,7 @@ Feature: Test subscription in Drift plugin
     And I should not see "Drift subscription"
     And I log out
    Then I log in as "admin"
-    And I navigate to "Users" in site administration
-    And I follow "Site administrators"
+    And I navigate to "Users > Site administrators" in site administration
     And I click on "//*[@id='addselect']/optgroup/option[1]" "xpath_element"
     And I click on "Add" "button"
     And I wait until the page is ready
