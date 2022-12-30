@@ -31,7 +31,6 @@ Feature: Test settings form in Drift plugin
       And I wait until the page is ready
       And I should see "Save form to test connection"
       And I should see "Client Secret Key"
-      And I follow "Click to enter text"
      Then I set the field with xpath "//input[@id='id_s_local_drift_clientkey']" to "dummy"
       # Please uncomment when INT-14017 is reverted.
       # And I should see "Roles Enabled"
@@ -42,7 +41,6 @@ Feature: Test settings form in Drift plugin
       # Please uncomment when INT-14017 is reverted.
       # And the field "Roles Enabled" matches value "teacher"
       And I should see "Client Secret Key"
-      And I follow "Edit password"
      Then I set the field with xpath "//input[@id='id_s_local_drift_clientkey']" to ""
       And I press "Save changes"
       And I wait until the page is ready
@@ -53,7 +51,6 @@ Feature: Test settings form in Drift plugin
     Given I log in as "admin"
       And I navigate to "Plugins > Drift Integration Plugin" in site administration
       And I wait until the page is ready
-      And I follow "Click to enter text"
      Then I set the field with xpath "//input[@id='id_s_local_drift_clientkey']" to "anything"
       And I press "Save changes"
       And I wait until the page is ready
@@ -66,7 +63,6 @@ Feature: Test settings form in Drift plugin
     Given I log in as "admin"
     And I navigate to "Plugins > Drift Integration Plugin" in site administration
     And I wait until the page is ready
-    And I follow "Click to enter text"
     Then I set the field with xpath "//input[@id='id_s_local_drift_clientkey']" to "right-password"
     And I press "Save changes"
     And I wait until the page is ready
