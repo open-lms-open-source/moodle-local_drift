@@ -23,8 +23,6 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
-
 define('LOCAL_DRIFT_VALID_ACCESS', 1);
 define('LOCAL_DRIFT_INVALID_ACCESS', 2);
 
