@@ -27,42 +27,46 @@ Feature: Test settings form in Drift plugin
   @javascript
   Scenario: Test connection button behaviour in drift plugin with and without client key.
     Given I log in as "admin"
-      And I navigate to "Plugins > Drift Integration Plugin" in site administration
-      And I wait until the page is ready
-      And I should see "Save form to test connection"
-      And I should see "Client Secret Key"
-     Then I set the field with xpath "//input[@id='id_s_local_drift_clientkey']" to "dummy"
-      # Please uncomment when INT-14017 is reverted.
-      # And I should see "Roles Enabled"
-      # And I set the field "Roles Enabled" to "teacher"
-      And I press "Save changes"
-      And I wait until the page is ready
-     Then I should see "Test connection"
-      # Please uncomment when INT-14017 is reverted.
-      # And the field "Roles Enabled" matches value "teacher"
-      And I should see "Client Secret Key"
-     Then I set the field with xpath "//input[@id='id_s_local_drift_clientkey']" to ""
-      And I press "Save changes"
-      And I wait until the page is ready
-      And I should see "Save form to test connection"
+    And I navigate to "Plugins > Drift Integration Plugin" in site administration
+    And I wait until the page is ready
+    And I should see "Save form to test connection"
+    And I should see "Client Secret Key"
+    And I click on "//a[@data-passwordunmask='edit']" "xpath_element"
+    Then I set the field with xpath "//input[@id='id_s_local_drift_clientkey']" to "dummy"
+    # Please uncomment when INT-14017 is reverted.
+    # And I should see "Roles Enabled"
+    # And I set the field "Roles Enabled" to "teacher"
+    And I press "Save changes"
+    And I wait until the page is ready
+    Then I should see "Test connection"
+    # Please uncomment when INT-14017 is reverted.
+    # And the field "Roles Enabled" matches value "teacher"
+    And I should see "Client Secret Key"
+    And I click on "//a[@data-passwordunmask='edit']" "xpath_element"
+    Then I set the field with xpath "//input[@id='id_s_local_drift_clientkey']" to ""
+    And I press "Save changes"
+    And I wait until the page is ready
+    And I should see "Save form to test connection"
 
   @javascript
   Scenario: Test modal with an invalid client key.
     Given I log in as "admin"
-      And I navigate to "Plugins > Drift Integration Plugin" in site administration
-      And I wait until the page is ready
-     Then I set the field with xpath "//input[@id='id_s_local_drift_clientkey']" to "anything"
-      And I press "Save changes"
-      And I wait until the page is ready
-      And I press "Test connection"
-      And I wait "3" seconds
-     Then I should see "Connection not verified. Check client key."
+    And I navigate to "Plugins > Drift Integration Plugin" in site administration
+    And I wait until the page is ready
+    And I click on "//a[@data-passwordunmask='edit']" "xpath_element"
+    Then I set the field with xpath "//input[@id='id_s_local_drift_clientkey']" to "anything"
+    And I press "Save changes"
+    And I wait until the page is ready
+    And I press "Test connection"
+    And I wait "3" seconds
+    Then I should see "Connection not verified. Check client key."
 
   @javascript
   Scenario: Test modal with a valid client key.
     Given I log in as "admin"
     And I navigate to "Plugins > Drift Integration Plugin" in site administration
     And I wait until the page is ready
+    And I click on "//a[@data-passwordunmask='edit']" "xpath_element"
     Then I set the field with xpath "//input[@id='id_s_local_drift_clientkey']" to "right-password"
     And I press "Save changes"
     And I wait until the page is ready
