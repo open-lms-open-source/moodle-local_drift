@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
  *
- * @package   local_drift
  * @author    Guillermo Leon Alvarez Salamanca
  * @copyright Copyright (c) 2018 Open LMS (https://www.openlms.net)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -129,7 +128,7 @@ define(['jquery', 'core/str', 'core/modal_factory', 'core/templates', 'local_dri
                 /**
                  * Change modal class and texts.
                  * @param {bool} status Response status
-                 * @param string
+                 * @param {string} string
                  */
                 var changeModal = function(status, string) {
                     swapClasses(status);

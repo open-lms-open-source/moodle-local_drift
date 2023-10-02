@@ -42,47 +42,47 @@ Feature: Test subscription in Drift plugin
 
   Scenario: Link for Drift subscription should appear only to roles enable on Drift settings and site admins.
     Given I log in as "student1"
-      And I go to my profile page
-      And I should not see "Drift subscription"
-      And I log out
-     Then I log in as "teacher1"
-      And I go to my profile page
-      And I should see "Drift subscription"
-      And I log out
-     Then I log in as "admin"
-      And I go to my profile page
-      And I should see "Drift subscription"
-      And I log out
+    And I go to my profile page
+    And I should not see "Drift subscription"
+    And I log out
+    Then I log in as "teacher1"
+    And I go to my profile page
+    And I should see "Drift subscription"
+    And I log out
+    Then I log in as "admin"
+    And I go to my profile page
+    And I should see "Drift subscription"
+    And I log out
 
   Scenario: Subscription form should save state of user subscription.
     Given I log in as "teacher1"
-      And I go to my profile page
-      And I follow "Drift subscription"
-     Then I wait until the page is ready
-      And the field "Drift subscription" matches value "0"
-      And I set the field "Drift subscription" to "1"
-      And I press "Save changes"
-     Then I log out
-      And I log in as "teacher1"
-      And I go to my profile page
-      And I follow "Drift subscription"
-      And the field "Drift subscription" matches value "1"
+    And I go to my profile page
+    And I follow "Drift subscription"
+    Then I wait until the page is ready
+    And the field "Drift subscription" matches value "0"
+    And I set the field "Drift subscription" to "1"
+    And I press "Save changes"
+    Then I log out
+    And I log in as "teacher1"
+    And I go to my profile page
+    And I follow "Drift subscription"
+    And the field "Drift subscription" matches value "1"
 
   @javascript
   Scenario: Site admin should be enrolled by default to Drift and he could change the state of his subscription.
     Given I log in as "admin"
-      And I go to my profile page
-      And I should see "Drift subscription"
-      And I follow "Drift subscription"
-      And the field "Drift subscription" matches value "1"
-      And I set the field "Drift subscription" to "0"
-      And I press "Save changes"
-      And the field "Drift subscription" matches value "0"
-     Then I log out
-      And I log in as "admin"
-      And I go to my profile page
-      And I follow "Drift subscription"
-     Then the field "Drift subscription" matches value "0"
+    And I go to my profile page
+    And I should see "Drift subscription"
+    And I follow "Drift subscription"
+    And the field "Drift subscription" matches value "1"
+    And I set the field "Drift subscription" to "0"
+    And I press "Save changes"
+    And the field "Drift subscription" matches value "0"
+    Then I log out
+    And I log in as "admin"
+    And I go to my profile page
+    And I follow "Drift subscription"
+    Then the field "Drift subscription" matches value "0"
 
   @javascript
   Scenario: New site admin should be enrolled by default to Drift.
@@ -90,14 +90,14 @@ Feature: Test subscription in Drift plugin
     And I go to my profile page
     And I should not see "Drift subscription"
     And I log out
-   Then I log in as "admin"
+    Then I log in as "admin"
     And I navigate to "Users > Site administrators" in site administration
     And I click on "//*[@id='addselect']/optgroup/option[1]" "xpath_element"
     And I click on "Add" "button"
     And I wait until the page is ready
     And I click on "Continue" "button"
     And I log out
-   Then I log in as "admin2"
+    Then I log in as "admin2"
     And I go to my profile page
     And I follow "Drift subscription"
     And the field "Drift subscription" matches value "1"
