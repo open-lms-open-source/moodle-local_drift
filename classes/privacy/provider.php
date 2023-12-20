@@ -57,7 +57,7 @@ class provider implements
 
         $params = [
             'userid' => $userid,
-            'usercontext' => CONTEXT_USER
+            'usercontext' => CONTEXT_USER,
         ];
 
         $contextlist->add_from_sql($sql, $params);
@@ -89,7 +89,7 @@ class provider implements
         if (!empty($record)) {
             $data = (object)[
                 'userid' => transform::user($record->userid),
-                'subscribed' => transform::yesno($record->subscribed)
+                'subscribed' => transform::yesno($record->subscribed),
             ];
             writer::with_context($context)->export_data(['local_drift_subscription'], $data);
         }
@@ -146,7 +146,7 @@ class provider implements
         $collection->add_database_table('local_drift_subscription',
             [
                 'userid' => 'privacy:metadata:local_drift_subscription:userid',
-                'subscribed' => 'privacy:metadata:local_drift_subscription:subscribed'
+                'subscribed' => 'privacy:metadata:local_drift_subscription:subscribed',
             ],
             'privacy:metadata:local_drift_subscription');
 
