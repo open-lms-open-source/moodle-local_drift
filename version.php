@@ -32,5 +32,5 @@ $plugin->component = 'local_drift';
 $plugin->cron = 0;
 $plugin->maturity = MATURITY_STABLE;
 $plugin->dependencies = [
-    'local_mr'       => ANY_VERSION
+    'local_mr'       => ANY_VERSION,
 ];
